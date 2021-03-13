@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans|Rock+Salt|Shadows+Into+Light|Cedarville+Cursive");
+
+#nav-box {
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  border: 1px solid white;
+  padding: 20px;
+  margin: auto;
+  background-color: slategray;
+}
+#nav-box-title{
+  font-family: "Cedarville Cursive", cursive;
+  font-size: 32px;
+  font-weight: bolder;
+  text-align: center;
+  border: 1px solid white;
+  padding: 10px;
+  margin: auto;
+  background-color: slategray;
+}
+#nav-box:hover {
+  background-color: lightslategray;
+}
+#nav-box a {
+  font-family: "Cedarville Cursive", cursive;
+  color: white;
+}
+#nav-box a:hover {
+  color: blue;
+}
+
+#ordered-lists div h3 {
+  text-align: center;
+  color: gold;
+}
+
+body {
+  background-color: white;
+  color: black;
+}
+
+h1 {
+  padding-top: 20px;
+  padding-bottom: 40px;
+  text-align: center;
+  font-weight: bolder;
+}
+
+p {
+  padding-right: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid black;
+  background-color: lightgreen;
+  padding: 20px;
+}
+table th {
+  border: 1px solid black;
+  text-align: center;
+}
+
+table td{
+  border: 1px solid black;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.signature {
+  font-family: "Cedarville Cursive", cursive;
+  text-indent: 80px;
+}
+
+.row {
+  padding: 20px;
+}
