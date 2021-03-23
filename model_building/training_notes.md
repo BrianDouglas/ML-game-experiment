@@ -86,7 +86,7 @@
     ```
     POLICY: BoltzmannQPolicy()
     HYPERPARAMS: 4x 100 node hidden layers, 5x5 grid, 40 moves per episode, warmup = 100, mem_limit = 50,000, nb_steps= 100,000
-    REWARDS: -20 time out, 20 find goal, -.2 invalid move, -.1 every move
+    REWARDS: -20 time out, 20 find goal, -.` invalid move, -.1 every move
     RESULT: Little changed.
     Testing for 15 episodes ...
     Episode 1: reward: 19.600, steps: 5
@@ -119,6 +119,84 @@
     HYPERPARAMS: 4x 100 node hidden layers, 5x5 grid, 40 moves per episode, warmup = 100, mem_limit = 50,000, nb_steps= 100,000, 
     lr = 2.5e-4
     REWARDS: -20 time out, 20 find goal, -.2 invalid move, -.1 every move
-    RESULT: .
+    RESULT: ...failure
     
+    ```
+### 6) 
+  * reseting and tuning rewards/game length
+    ```
+    POLICY: BoltzmannQPolicy()
+    HYPERPARAMS: 2x 100 node hidden layers, 5x5 grid, 20 moves per episode, warmup = 100, mem_limit = 100,000, nb_steps= 100,000, 
+    lr = 1e-3
+    REWARDS: -20 time out, 20 find goal, -.1 invalid move, -.1 every move
+    RESULT: Performs well.
+    Testing for 15 episodes ...
+    Episode 1: reward: 19.700, steps: 4
+    Episode 2: reward: 19.600, steps: 5
+    Episode 3: reward: 19.300, steps: 8
+    Episode 4: reward: 19.700, steps: 4
+    Episode 5: reward: 19.600, steps: 5
+    Episode 6: reward: -21.900, steps: 20
+    Episode 7: reward: 19.700, steps: 4
+    Episode 8: reward: 19.700, steps: 4
+    Episode 9: reward: -21.900, steps: 20
+    Episode 10: reward: 19.700, steps: 4
+    Episode 11: reward: -21.900, steps: 20
+    Episode 12: reward: -21.900, steps: 20
+    Episode 13: reward: 19.800, steps: 3
+    Episode 14: reward: 19.700, steps: 4
+    Episode 15: reward: 19.700, steps: 4
+    Mean Reward: 8.57333333333333
+    Win Rate: 73.0%
+    ```
+### 7) 
+  * increasing training time by an order of magnitude
+    ```
+    POLICY: BoltzmannQPolicy()
+    HYPERPARAMS: 2x 100 node hidden layers, 5x5 grid, 20 moves per episode, warmup = 100, mem_limit = 100,000, nb_steps= 1,000,000, 
+    lr = 1e-3
+    REWARDS: -20 time out, 20 find goal, -.1 invalid move, -.1 every move
+    RESULT: Very poor. mean_q spiked near the end of training and results seem worse than random
+    
+    ```
+
+## Increased Grid Size Experiment
+### 1) 
+  * beginning with experiment number 6 config from above. Increased grid size to 10x10, adjusted num_moves
+    ```
+    POLICY: BoltzmannQPolicy()
+    HYPERPARAMS: 2x 100 node hidden layers, 10x10 grid, 40 moves per episode, warmup = 100, mem_limit = 100,000, nb_steps= 100,000, 
+    lr = 1e-3
+    REWARDS: -20 time out, 20 find goal, -.1 invalid move, -.1 every move
+    RESULT: Failure.
+    ```
+### 2) 
+  * updating reward structure. moves per episode and mem_limit now scale with size.
+    * rewards now based on https://www.samyzaf.com/ML/rl/qmaze.html
+    ```
+    POLICY: BoltzmannQPolicy()
+    HYPERPARAMS: 2x 100 node hidden layers, 10x10 grid, (size^2)/2 moves per episode, warmup = 100, mem_limit = 8*size^2, 
+    nb_steps= 300,000, lr = 1e-3
+    REWARDS: -1 time out, 1 find goal, -.8 invalid move, -.04 every move
+    RESULT: Failure.
+    ```
+### 3)
+  * Should I be randomly generating a board every time? Is the idea to train on one board then it can generalize to arbitrary boards later?
+    * Setting static X,Y positions for player and goal
+    ```
+    POLICY: BoltzmannQPolicy()
+    HYPERPARAMS: 2x 100 node hidden layers, 10x10 grid, (size^2)/2 moves per episode, warmup = 100, mem_limit = 8*size^2, 
+    nb_steps= 100,000, lr = 1e-3
+    REWARDS: -1 time out, 1 find goal, -.8 invalid move, -.04 every move
+    RESULT: Perfect performance. Can be achieved with as little as 10,000 steps this way
+    ```
+### 4)
+  * I still want to try to generalize. 
+    * I will now add a punishment to revisiting a node.
+    ```
+    POLICY: BoltzmannQPolicy()
+    HYPERPARAMS: 2x 100 node hidden layers, 10x10 grid, (size^2)/2 moves per episode, warmup = 100, mem_limit = 8*size^2, 
+    nb_steps= 100,000, lr = 1e-3
+    REWARDS: -1 time out, 1 find goal, -.8 invalid move, -.04 every move, -.25 backtrack
+    RESULT: Perfect performance. Can be achieved with as little as 10,000 steps this way
     ```

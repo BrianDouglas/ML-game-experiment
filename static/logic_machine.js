@@ -7,10 +7,10 @@ const PLAYERCOLOR = "orange";
 const EXITCOLOR = "purple";
 const COINCOLOR = "gold";
 
-const WIDTH = 420;
-const HEIGHT = 420;
+const WIDTH = 580;
+const HEIGHT = 580;
 
-const GRIDSIZE = 10;
+const GRIDSIZE = 5;
 
 class GridSystem {
 /*
@@ -19,7 +19,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 	constructor(matrix, playerX, playerY, elementID = "game") {
 		this.matrix = matrix;
         this.elementID = elementID;
-        //this.#reset();
+        this.#reset();
 		this.uiContext = this.#getContext(WIDTH, HEIGHT, UICOLOR);
 		this.outlineContext = this.#getContext(0, 0, OUTLINECOLOR);
 		this.topContext = this.#getContext(0, 0, BACKGROUNDCOLOR, true);
@@ -28,37 +28,17 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 
         this.player = { x: playerX, y: playerY, color: PLAYERCOLOR, size: 20 };
         this.matrix[playerY][playerX] = 2;
-		this.num_goals = 3
+        this.matrix[parseInt(GRIDSIZE/2)][parseInt(GRIDSIZE/2)] = 3;
 
-		this.moveHistory = [];
         document.addEventListener("keydown", this.#movePlayer);
-	}
-
-	getMoveHistory(){
-		console.log(this.moveHistory)
-	}
-
-	#sendMoves(){
-		if (this.num_goals == 0){
-			fetch('/game_data', {
-				headers: { 'Content-Type': 'application/json'},
-				method: 'POST',
-				body: JSON.stringify(this.moveHistory)
-			})
-		}
 	}
 
     #isValidMove(x, y) {
         let newX = this.player.x + x;
         let newY = this.player.y + y;
-		let Xbound = true ? newX >= 0 && newX < this.matrix[0].length : false;
+        let Xbound = true ? newX >= 0 && newX < this.matrix[0].length : false;
         let Ybound = true ? newY >= 0 && newY < this.matrix.length : false;
 		if (Xbound && Ybound){
-			if (this.matrix[newY][newX] == 3){
-				this.num_goals -= 1;
-				this.#sendMoves()
-				return true
-			}
             if (this.matrix[newY][newX] != 1){
                 return true;
             }
@@ -72,48 +52,38 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 
     #movePlayer = ( event ) => {
 		var key = event.code;
-		if (this.num_goals > 0){
-			if (key === "KeyA") {
-				if (this.#isValidMove(-1, 0)) {
-					this.moveHistory.push({state: this.matrix, action: 'LEFT'})
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y, this.player.x - 1, 2);
-					this.player.x --;
-					this.render();
-				}
-			} else if (key === "KeyD") {
-				if (this.#isValidMove(1, 0)) {
-					this.moveHistory.push({state: this.matrix, action: 'RIGHT'})
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y, this.player.x + 1, 2);
-					this.player.x ++;
-					this.render();
-				}
-			} else if (key === "KeyW") {
-				if (this.#isValidMove(0, -1)) {
-					this.moveHistory.push({state: this.matrix, action: 'UP'})
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y - 1, this.player.x, 2);
-					this.player.y --;
-					this.render();
-				}
-			} else if (key === "KeyS") {
-				if (this.#isValidMove(0, 1)) {
-					this.moveHistory.push({state: this.matrix, action: 'DOWN'})
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y + 1, this.player.x, 2);
-					this.player.y ++;
-					this.render();
-				}
+        if (key === "KeyA") {
+			if (this.#isValidMove(-1, 0)) {
+                this.#updateMatrix(this.player.y, this.player.x, 0);
+                this.#updateMatrix(this.player.y, this.player.x - 1, 2);
+                this.player.x --;
+                this.render();
+		    }
+		} else if (key === "KeyD") {
+			if (this.#isValidMove(1, 0)) {
+				this.#updateMatrix(this.player.y, this.player.x, 0);
+ 			 	this.#updateMatrix(this.player.y, this.player.x + 1, 2);
+				this.player.x ++;
+				this.render();
 			}
-		}	 
-		if (key === "KeyR") {
-			this.#reset()
+		} else if (key === "KeyW") {
+			if (this.#isValidMove(0, -1)) {
+				this.#updateMatrix(this.player.y, this.player.x, 0);
+ 			 	this.#updateMatrix(this.player.y - 1, this.player.x, 2);
+				this.player.y --;
+				this.render();
+			}
+		} else if (key === "KeyS") {
+			if (this.#isValidMove(0, 1)) {
+				this.#updateMatrix(this.player.y, this.player.x, 0);
+ 			 	this.#updateMatrix(this.player.y + 1, this.player.x, 2);
+				this.player.y ++;
+				this.render();
+			}
 		}
 	}
 
 	#getCenter(w, h) {
-		//center on x on window. center y on game size
 		return {
 			x: window.innerWidth / 2 - w / 2 + "px",
 			y: HEIGHT / 2 - h / 2 + "px"
@@ -194,62 +164,30 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 			}
 		}
 
-		this.uiContext.clearRect(0,0, WIDTH, HEIGHT)
 		this.uiContext.font = "20px Courier";
 		this.uiContext.fillStyle = "white";
 		this.uiContext.fillText("2EZ Game", 20, 30);
-		this.uiContext.fillText(`Goals Remaining: ${this.num_goals}`, 200, 30);
-		if (this.num_goals == 0){
-			this.uiContext.font = "24px Courier";
-			this.uiContext.fillStyle = "gold";
-			this.uiContext.fillText("YOU WIN! Press 'r' to reset", 20, 400);
-		}
 	}
 
     #reset(){
         document.getElementById(this.elementID).innerHTML = "";
-		this.matrix =  [[1,1,1,1,1,1,1,1,1,1],
-						[1,0,0,0,0,0,0,0,0,1],
-						[1,1,1,0,1,1,1,0,1,1],
-						[1,0,0,0,0,1,0,0,0,1],
-						[1,0,1,1,0,1,0,1,0,1],
-						[1,0,1,1,0,3,0,1,0,1],
-						[1,0,0,0,1,0,0,1,0,1],
-						[1,1,1,0,1,0,1,1,0,1],
-						[1,3,0,0,1,0,0,0,3,1],
-						[1,1,1,1,1,1,1,1,1,1]];
-		this.uiContext = this.#getContext(WIDTH, HEIGHT, UICOLOR);
-		this.outlineContext = this.#getContext(0, 0, OUTLINECOLOR);
-		this.topContext = this.#getContext(0, 0, BACKGROUNDCOLOR, true);
-		this.player = { x: 1, y: 1, color: PLAYERCOLOR, size: 20 };
-        this.matrix[this.player.y][this.player.x] = 2;
-
-		this.num_goals = 3
-		this.moveHistory = [];
-        //document.addEventListener("keydown", this.#movePlayer);
-		this.render();
     }
 }
 
-const gridMatrix = [[1,1,1,1,1,1,1,1,1,1],
-					[1,0,0,0,0,0,0,0,0,1],
-					[1,1,1,0,1,1,1,0,1,1],
-					[1,0,0,0,0,1,0,0,0,1],
-					[1,0,1,1,0,1,0,1,0,1],
-					[1,0,1,1,0,3,0,1,0,1],
-					[1,0,0,0,1,0,0,1,0,1],
-					[1,1,1,0,1,0,1,1,0,1],
-					[1,3,0,0,1,0,0,0,3,1],
-					[1,1,1,1,1,1,1,1,1,1]];
+const gridMatrix = [];
 
-/*for (var i = 0; i < GRIDSIZE; i++){
+for (var i = 0; i < GRIDSIZE; i++){
     gridMatrix.push([]);
     for (var j = 0; j < GRIDSIZE; j++){
+        //if ((i+j)%5 == 0){
+        //    gridMatrix[i].push(3)
+        //} else{
         gridMatrix[i].push(0);
+        //}
     }
-}*/
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-    let gridSystem = new GridSystem(gridMatrix, 1, 1);
+    const gridSystem = new GridSystem(gridMatrix, 0,0);
     gridSystem.render();
 });

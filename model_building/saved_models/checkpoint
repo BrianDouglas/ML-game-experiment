@@ -1,2 +1,2 @@
-model_checkpoint_path: "78_perc_success.h5f"
-all_model_checkpoint_paths: "78_perc_success.h5f"
+model_checkpoint_path: "static_10x10_perfecto.h5f"
+all_model_checkpoint_paths: "static_10x10_perfecto.h5f"
