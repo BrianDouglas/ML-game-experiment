@@ -74,7 +74,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
     #movePlayer = ( event ) => {
 		var key = event.code;
 		if (this.num_goals > 0){
-			let current_state = this.matrix;
+			let current_state = JSON.parse(JSON.stringify(this.matrix));
 			if (key === "KeyA") {
 				if (this.#isValidMove(-1, 0)) {
 					this.moveHistory.push({state: current_state, action: 'LEFT'});
