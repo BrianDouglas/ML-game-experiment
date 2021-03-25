@@ -31,7 +31,7 @@ def game_data():
     data = request.get_json()
     if (LOAD_DB):
         connectTo = 'final_project'
-        client = pymongo.MongoClient(f"mongodb+srv://{bd_config.USERNAME}:{bd_config.PASSWORD}@bricluster.yskth.mongodb.net/{connectTo}?retryWrites=true&w=majority")
+        client = pymongo.MongoClient(f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@bricluster.yskth.mongodb.net/{connectTo}?retryWrites=true&w=majority")
         db = client.final_project
         collection = db.state_action
         collection.insert_many(data)
