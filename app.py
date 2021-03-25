@@ -1,5 +1,8 @@
 import os
 from datetime import datetime
+import json
+import pymongo
+import os
 
 from flask import Flask, session, render_template, request, jsonify
 #from flask_socketio import SocketIO, emit
@@ -22,8 +25,16 @@ def machine():
 
 @app.route("/game_data", methods=['POST'])
 def game_data():
-    if request.method == "POST":
-        print(request.get_json())
+    data = request.get_json()
+    if (False):
+        connectTo = 'final_project'
+        client = pymongo.MongoClient(f"mongodb+srv://admin:bd2411008@bricluster.yskth.mongodb.net/{connectTo}?retryWrites=true&w=majority")
+        db = client.final_project
+        collection = db.state_action
+        collection.insert_many(data)
+        client.close()
+    else:
+        print(data)
     return "OK", 200
 
 if __name__ == "__main__":

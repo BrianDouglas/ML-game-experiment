@@ -39,11 +39,12 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 	}
 
 	#sendMoves(){
+		let states_actions = JSON.stringify(this.moveHistory)
 		if (this.num_goals == 0){
 			fetch('/game_data', {
 				headers: { 'Content-Type': 'application/json'},
 				method: 'POST',
-				body: JSON.stringify(this.moveHistory)
+				body: states_actions
 			})
 		}
 	}
@@ -73,9 +74,10 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
     #movePlayer = ( event ) => {
 		var key = event.code;
 		if (this.num_goals > 0){
+			let current_state = this.matrix;
 			if (key === "KeyA") {
 				if (this.#isValidMove(-1, 0)) {
-					this.moveHistory.push({state: this.matrix, action: 'LEFT'})
+					this.moveHistory.push({state: current_state, action: 'LEFT'});
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y, this.player.x - 1, 2);
 					this.player.x --;
@@ -83,7 +85,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyD") {
 				if (this.#isValidMove(1, 0)) {
-					this.moveHistory.push({state: this.matrix, action: 'RIGHT'})
+					this.moveHistory.push({state: current_state, action: 'RIGHT'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y, this.player.x + 1, 2);
 					this.player.x ++;
@@ -91,7 +93,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyW") {
 				if (this.#isValidMove(0, -1)) {
-					this.moveHistory.push({state: this.matrix, action: 'UP'})
+					this.moveHistory.push({state: current_state, action: 'UP'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y - 1, this.player.x, 2);
 					this.player.y --;
@@ -99,7 +101,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyS") {
 				if (this.#isValidMove(0, 1)) {
-					this.moveHistory.push({state: this.matrix, action: 'DOWN'})
+					this.moveHistory.push({state: current_state, action: 'DOWN'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y + 1, this.player.x, 2);
 					this.player.y ++;
