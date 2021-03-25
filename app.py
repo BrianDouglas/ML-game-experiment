@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 import json
 import pymongo
-import os
 import bd_config
 
 from flask import Flask, session, render_template, request, jsonify
