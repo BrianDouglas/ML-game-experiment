@@ -19,7 +19,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 	constructor(matrix, playerX, playerY, elementID = "game") {
 		this.matrix = matrix;
         this.elementID = elementID;
-        //this.#reset();
+        this.game_id = Date.now()
 		this.uiContext = this.#getContext(WIDTH, HEIGHT, UICOLOR);
 		this.outlineContext = this.#getContext(0, 0, OUTLINECOLOR);
 		this.topContext = this.#getContext(0, 0, BACKGROUNDCOLOR, true);
@@ -77,7 +77,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 			let current_state = JSON.parse(JSON.stringify(this.matrix));
 			if (key === "KeyA") {
 				if (this.#isValidMove(-1, 0)) {
-					this.moveHistory.push({state: current_state, action: 'LEFT'});
+					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'LEFT'});
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y, this.player.x - 1, 2);
 					this.player.x --;
@@ -220,6 +220,8 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 						[1,1,1,0,1,0,1,1,0,1],
 						[1,3,0,0,1,0,0,0,3,1],
 						[1,1,1,1,1,1,1,1,1,1]];
+
+		this.game_id = Date.now();
 		this.uiContext = this.#getContext(WIDTH, HEIGHT, UICOLOR);
 		this.outlineContext = this.#getContext(0, 0, OUTLINECOLOR);
 		this.topContext = this.#getContext(0, 0, BACKGROUNDCOLOR, true);
@@ -228,7 +230,6 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 
 		this.num_goals = 3
 		this.moveHistory = [];
-        //document.addEventListener("keydown", this.#movePlayer);
 		this.render();
     }
 }
