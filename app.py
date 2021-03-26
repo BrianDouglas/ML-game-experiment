@@ -6,9 +6,6 @@ import pymongo
 from flask import Flask, session, render_template, request, jsonify
 #from flask_socketio import SocketIO, emit
 
-from GameEnv import GameEnv
-from ModelBuilder import *
-
 LOAD_DB = True
 
 app = Flask(__name__)
