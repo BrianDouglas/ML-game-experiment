@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 import json
 import pymongo
-import bd_config
 
 from flask import Flask, session, render_template, request, jsonify
 #from flask_socketio import SocketIO, emit
@@ -10,7 +9,6 @@ from flask import Flask, session, render_template, request, jsonify
 from GameEnv import GameEnv
 from ModelBuilder import *
 
-bd_config.init()
 LOAD_DB = True
 
 app = Flask(__name__)
