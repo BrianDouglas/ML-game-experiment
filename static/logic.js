@@ -85,7 +85,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyD") {
 				if (this.#isValidMove(1, 0)) {
-					this.moveHistory.push({state: current_state, action: 'RIGHT'})
+					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'RIGHT'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y, this.player.x + 1, 2);
 					this.player.x ++;
@@ -93,7 +93,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyW") {
 				if (this.#isValidMove(0, -1)) {
-					this.moveHistory.push({state: current_state, action: 'UP'})
+					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'UP'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y - 1, this.player.x, 2);
 					this.player.y --;
@@ -101,7 +101,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyS") {
 				if (this.#isValidMove(0, 1)) {
-					this.moveHistory.push({state: current_state, action: 'DOWN'})
+					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'DOWN'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y + 1, this.player.x, 2);
 					this.player.y ++;
