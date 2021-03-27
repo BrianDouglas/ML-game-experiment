@@ -1,5 +1,6 @@
 # security things
 bd_config.py
+saved_figs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

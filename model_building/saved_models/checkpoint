@@ -1,2 +1,2 @@
-model_checkpoint_path: "10x10_maze_easy.h5f"
-all_model_checkpoint_paths: "10x10_maze_easy.h5f"
+model_checkpoint_path: "10x10_maze_easy_redux.h5f"
+all_model_checkpoint_paths: "10x10_maze_easy_redux.h5f"
