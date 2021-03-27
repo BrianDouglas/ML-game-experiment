@@ -198,5 +198,43 @@
     HYPERPARAMS: 2x 100 node hidden layers, 10x10 grid, (size^2)/2 moves per episode, warmup = 100, mem_limit = 8*size^2, 
     nb_steps= 100,000, lr = 1e-3
     REWARDS: -1 time out, 1 find goal, -.8 invalid move, -.04 every move, -.25 backtrack
-    RESULT: Perfect performance. Can be achieved with as little as 10,000 steps this way
+    RESULT: Back track punishment seems to lead to a stalled state in multigoal environment
     ```
+
+## Playing on a predefined maze.
+  ### Original Matrix
+  
+  ```
+  [[1,1,1,1,1,1,1,1,1,1],
+   [1,2,0,0,0,0,0,0,0,1],
+   [1,1,1,0,1,1,1,0,1,1],
+   [1,0,0,0,0,1,0,0,0,1],
+   [1,0,1,1,0,1,0,1,0,1],
+   [1,0,1,1,0,3,0,1,0,1],
+   [1,0,0,0,1,0,0,1,0,1],
+   [1,1,1,0,1,0,1,1,0,1],
+   [1,3,0,0,1,0,0,0,3,1],
+   [1,1,1,1,1,1,1,1,1,1]]
+  ```
+
+  * It was pretty easy to get it to find the first 2 goals. It always went to the middle then the right one no matter how much I tweaked the rewards.
+    * Tried penalizing backtracking
+    * Tried rewarding decreasing cartisean distance to nearest goal
+  * Found this paper that has me thinking this may be a harder problem than I thought.
+    * http://proceedings.mlr.press/v119/pitis20a/pitis20a.pdf
+    * It's all about getting RL agents to master 'long-horizon, sparse reward tasks' which this maze may qualify as.
+  ### Easier Matrix
+  * Giving the agent a short cut to the final goal to see if it will find it.
+  ```
+  [[1,1,1,1,1,1,1,1,1,1],
+   [1,0,0,0,0,0,0,0,0,1],
+   [1,1,1,0,1,1,1,0,1,1],
+   [1,0,0,0,0,1,0,0,0,1],
+   [1,0,1,1,1,1,0,1,0,1],
+   [1,0,1,1,0,3,0,1,0,1],
+   [1,0,0,0,0,0,0,1,0,1],
+   [1,1,1,0,1,0,1,1,0,1],
+   [1,3,0,0,1,0,0,0,3,1],
+   [1,1,1,1,1,1,1,1,1,1]]
+  ```
+  * Found it, no problem. Simple reward structure. No rewards for back_tracking or getting closer.
