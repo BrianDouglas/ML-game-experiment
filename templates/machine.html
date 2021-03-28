@@ -1,12 +1,37 @@
 {% extends "layout.html"%}
 
 {%block script%}
+<script type="text/javascript">
+    function newImage(){
+        let select_el = document.getElementById("img_select");
+        let new_val = select_el.value;
+        let new_txt = select_el.options[select_el.selectedIndex].text;
+        document.getElementById("gif_label").innerText = new_txt;
+        document.getElementById("gif_img").src = `static/images/${new_val}_agent.gif`
+
+    }
+</script>
 <script type="text/javascript" src="{{ url_for('static', filename='logic_machine.js') }}"></script>
 {%endblock%}
 
 {% block heading%}
-UNDER CONSTRUCTION!
+<h1>The Machine</h1>
 {% endblock %}
 {% block body %}
-<div id="game"></div>
+<h2 id="gif_label">Finished Agent</h2>
+<img id="gif_img" src="static/images/final_agent.gif">
+<label for="iteration">Choose an episode</label>
+<select name="iteration" id="img_select" onchange="newImage()">
+    <option value="0">1st Episode</option>
+    <option value="25">25th Episode</option>
+    <option value="50">50th Episode</option>
+    <option value="75">75th Episode</option>
+    <option value="100">100th Episode</option>
+    <option value="200">200th Episode</option>
+    <option value="300">300th Episode</option>
+    <option value="400">400th Episode</option>
+    <option value="final" selected="selected">Final Agent</option>
+</select>
+
+
 {% endblock %}

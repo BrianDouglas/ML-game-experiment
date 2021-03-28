@@ -6,7 +6,7 @@ import pymongo
 from flask import Flask, session, render_template, request, jsonify
 #from flask_socketio import SocketIO, emit
 
-LOAD_DB = True
+LOAD_DB = False
 
 app = Flask(__name__)
 #app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")

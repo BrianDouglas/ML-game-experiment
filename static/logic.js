@@ -39,14 +39,14 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 	}
 
 	#sendMoves(){
-		let states_actions = JSON.stringify(this.moveHistory)
-		if (this.num_goals == 0){
-			fetch('/game_data', {
-				headers: { 'Content-Type': 'application/json'},
-				method: 'POST',
-				body: states_actions
-			})
-		}
+		let moveHistory_ids = {id: this.game_id, gameplay: this.moveHistory}
+		let states_actions = JSON.stringify(moveHistory_ids)
+		fetch('/game_data', {
+			headers: { 'Content-Type': 'application/json'},
+			method: 'POST',
+			body: states_actions
+		})
+		this.num_goals -= 1;
 	}
 
     #isValidMove(x, y) {
@@ -57,7 +57,6 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		if (Xbound && Ybound){
 			if (this.matrix[newY][newX] == 3){
 				this.num_goals -= 1;
-				this.#sendMoves()
 				return true
 			}
             if (this.matrix[newY][newX] != 1){
@@ -77,7 +76,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 			let current_state = JSON.parse(JSON.stringify(this.matrix));
 			if (key === "KeyA") {
 				if (this.#isValidMove(-1, 0)) {
-					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'LEFT'});
+					this.moveHistory.push({state: current_state, action: 'LEFT'});
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y, this.player.x - 1, 2);
 					this.player.x --;
@@ -85,7 +84,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyD") {
 				if (this.#isValidMove(1, 0)) {
-					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'RIGHT'})
+					this.moveHistory.push({state: current_state, action: 'RIGHT'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y, this.player.x + 1, 2);
 					this.player.x ++;
@@ -93,7 +92,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyW") {
 				if (this.#isValidMove(0, -1)) {
-					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'UP'})
+					this.moveHistory.push({state: current_state, action: 'UP'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y - 1, this.player.x, 2);
 					this.player.y --;
@@ -101,13 +100,16 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyS") {
 				if (this.#isValidMove(0, 1)) {
-					this.moveHistory.push({game_id: this.game_id, state: current_state, action: 'DOWN'})
+					this.moveHistory.push({state: current_state, action: 'DOWN'})
 					this.#updateMatrix(this.player.y, this.player.x, 0);
 					this.#updateMatrix(this.player.y + 1, this.player.x, 2);
 					this.player.y ++;
 					this.render();
 				}
 			}
+		}
+		if (this.num_goals === 0){
+			this.#sendMoves()
 		}	 
 		if (key === "KeyR") {
 			this.#reset()
@@ -214,9 +216,9 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 						[1,0,0,0,0,0,0,0,0,1],
 						[1,1,1,0,1,1,1,0,1,1],
 						[1,0,0,0,0,1,0,0,0,1],
-						[1,0,1,1,0,1,0,1,0,1],
-						[1,0,1,1,0,3,0,1,0,1],
-						[1,0,0,0,1,0,0,1,0,1],
+						[1,0,1,1,1,1,0,1,0,1],
+						[1,0,1,1,3,1,0,1,0,1],
+						[1,0,0,0,0,0,0,1,0,1],
 						[1,1,1,0,1,0,1,1,0,1],
 						[1,3,0,0,1,0,0,0,3,1],
 						[1,1,1,1,1,1,1,1,1,1]];
@@ -238,9 +240,9 @@ const gridMatrix = [[1,1,1,1,1,1,1,1,1,1],
 					[1,0,0,0,0,0,0,0,0,1],
 					[1,1,1,0,1,1,1,0,1,1],
 					[1,0,0,0,0,1,0,0,0,1],
-					[1,0,1,1,0,1,0,1,0,1],
-					[1,0,1,1,0,3,0,1,0,1],
-					[1,0,0,0,1,0,0,1,0,1],
+					[1,0,1,1,1,1,0,1,0,1],
+					[1,0,1,1,3,1,0,1,0,1],
+					[1,0,0,0,0,0,0,1,0,1],
 					[1,1,1,0,1,0,1,1,0,1],
 					[1,3,0,0,1,0,0,0,3,1],
 					[1,1,1,1,1,1,1,1,1,1]];
