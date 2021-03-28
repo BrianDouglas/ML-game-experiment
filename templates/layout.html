@@ -11,17 +11,20 @@
     </head>
     <body>
         <div class="row">
-            <div id="nav-box-title" class="col-md-12 col-sm-12" style="font-family: 'Cedarville Cursive', cursive;">
+            <div id="nav-box-title" class="col-md-12 col-sm-12">
                 Easy Maze
             </div>
-            <div id="nav-box" class="col-md-4 col-sm-4">
-                <a href="{{ url_for('machine') }}" class="stretched-link">Machine Play</a>
-            </div>
-            <div id="nav-box" class="col-md-4 col-sm-4">
+            <div id="{{'nav-box-selected' if active_page == 'human' else 'nav-box'}}" class="col-md-3 col-sm-3">
                 <a id="page3" href="{{ url_for('index') }}" class="stretched-link">Human Play</a>
             </div>
-            <div id="nav-box" class="col-md-4 col-sm-4">
-                <a id="page3" href="https://github.com/BrianDouglas/ML-game-experiment" class="stretched-link">Git Repo</a>
+            <div id="{{'nav-box-selected' if active_page == 'machine' else 'nav-box'}}" class="col-md-3 col-sm-3">
+                <a href="{{ url_for('machine') }}" class="stretched-link">Machine Play</a>
+            </div>
+            <div id="{{'nav-box-selected' if active_page == 'data' else 'nav-box'}}" class="col-md-3 col-sm-3">
+                <a id="page3" href="{{ url_for('data') }}" class="stretched-link">Data Analysis</a>
+            </div>
+            <div id="nav-box" class="col-md-3 col-sm-3">
+                <a id="page3" href="https://github.com/BrianDouglas/ML-game-experiment" target= "_blank" class="stretched-link">Git Repo</a>
             </div>
         </div>
         <h1>{% block heading %}{% endblock %}</h1>

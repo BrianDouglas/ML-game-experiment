@@ -6,7 +6,7 @@ import pymongo
 from flask import Flask, session, render_template, request, jsonify
 #from flask_socketio import SocketIO, emit
 
-LOAD_DB = True
+LOAD_DB = False
 
 app = Flask(__name__)
 #app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
@@ -20,6 +20,10 @@ def index():
 @app.route("/machine")
 def machine():
     return render_template("machine.html")
+
+@app.route("/data")
+def data():
+    return render_template("data.html")
 
 @app.route("/game_data", methods=['POST'])
 def game_data():

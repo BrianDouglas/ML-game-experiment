@@ -1,4 +1,5 @@
 {% extends "layout.html"%}
+{% set active_page = "machine" %}
 
 {%block script%}
 <script type="text/javascript">
@@ -11,11 +12,10 @@
 
     }
 </script>
-<script type="text/javascript" src="{{ url_for('static', filename='logic_machine.js') }}"></script>
+<script type="text/javascript" src="#"></script>
 {%endblock%}
-
 {% block heading%}
-<h1>The Machine</h1>
+The Machine
 {% endblock %}
 {% block body %}
 <h2 id="gif_label">Finished Agent</h2>
