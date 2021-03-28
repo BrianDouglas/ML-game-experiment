@@ -29,10 +29,11 @@ def game_data():
         client = pymongo.MongoClient(f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@bricluster.yskth.mongodb.net/{connectTo}?retryWrites=true&w=majority")
         db = client.final_project
         collection = db.state_action
-        collection.insert_many(data)
+        collection.insert(data)
         client.close()
     else:
         print(data)
+        print(type(data))
     return "OK", 200
 
 if __name__ == "__main__":

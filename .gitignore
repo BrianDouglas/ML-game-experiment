@@ -1,6 +1,8 @@
 # security things
 bd_config.py
 model_building/saved_figs
+dump_db.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
