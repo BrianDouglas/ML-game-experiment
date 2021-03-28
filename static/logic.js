@@ -20,9 +20,9 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		this.matrix = matrix;
         this.elementID = elementID;
         this.game_id = Date.now()
-		this.uiContext = this.#getContext(WIDTH, HEIGHT, UICOLOR);
-		this.outlineContext = this.#getContext(0, 0, OUTLINECOLOR);
-		this.topContext = this.#getContext(0, 0, BACKGROUNDCOLOR, true);
+		this.uiContext = this.getContext(WIDTH, HEIGHT, UICOLOR);
+		this.outlineContext = this.getContext(0, 0, OUTLINECOLOR);
+		this.topContext = this.getContext(0, 0, BACKGROUNDCOLOR, true);
 		this.cellSize = 30;
 		this.padding = 2;
 
@@ -31,14 +31,14 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		this.num_goals = 3
 
 		this.moveHistory = [];
-        document.addEventListener("keydown", this.#movePlayer);
+        document.addEventListener("keydown", this.movePlayer);
 	}
 
 	getMoveHistory(){
 		console.log(this.moveHistory)
 	}
 
-	#sendMoves(){
+	sendMoves(){
 		let moveHistory_ids = {id: this.game_id, gameplay: this.moveHistory}
 		let states_actions = JSON.stringify(moveHistory_ids)
 		fetch('/game_data', {
@@ -49,7 +49,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		this.num_goals -= 1;
 	}
 
-    #isValidMove(x, y) {
+    isValidMove(x, y) {
         let newX = this.player.x + x;
         let newY = this.player.y + y;
 		let Xbound = true ? newX >= 0 && newX < this.matrix[0].length : false;
@@ -66,57 +66,57 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		return false;
 	}
 
-    #updateMatrix(y, x, val) {
+    updateMatrix(y, x, val) {
 		this.matrix[y][x] = val;
 	}
 
-    #movePlayer = ( event ) => {
+    movePlayer = ( event ) => {
 		var key = event.code;
 		if (this.num_goals > 0){
 			let current_state = JSON.parse(JSON.stringify(this.matrix));
 			if (key === "KeyA") {
-				if (this.#isValidMove(-1, 0)) {
+				if (this.isValidMove(-1, 0)) {
 					this.moveHistory.push({state: current_state, action: 'LEFT'});
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y, this.player.x - 1, 2);
+					this.updateMatrix(this.player.y, this.player.x, 0);
+					this.updateMatrix(this.player.y, this.player.x - 1, 2);
 					this.player.x --;
 					this.render();
 				}
 			} else if (key === "KeyD") {
-				if (this.#isValidMove(1, 0)) {
+				if (this.isValidMove(1, 0)) {
 					this.moveHistory.push({state: current_state, action: 'RIGHT'})
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y, this.player.x + 1, 2);
+					this.updateMatrix(this.player.y, this.player.x, 0);
+					this.updateMatrix(this.player.y, this.player.x + 1, 2);
 					this.player.x ++;
 					this.render();
 				}
 			} else if (key === "KeyW") {
-				if (this.#isValidMove(0, -1)) {
+				if (this.isValidMove(0, -1)) {
 					this.moveHistory.push({state: current_state, action: 'UP'})
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y - 1, this.player.x, 2);
+					this.updateMatrix(this.player.y, this.player.x, 0);
+					this.updateMatrix(this.player.y - 1, this.player.x, 2);
 					this.player.y --;
 					this.render();
 				}
 			} else if (key === "KeyS") {
-				if (this.#isValidMove(0, 1)) {
+				if (this.isValidMove(0, 1)) {
 					this.moveHistory.push({state: current_state, action: 'DOWN'})
-					this.#updateMatrix(this.player.y, this.player.x, 0);
-					this.#updateMatrix(this.player.y + 1, this.player.x, 2);
+					this.updateMatrix(this.player.y, this.player.x, 0);
+					this.updateMatrix(this.player.y + 1, this.player.x, 2);
 					this.player.y ++;
 					this.render();
 				}
 			}
 		}
 		if (this.num_goals === 0){
-			this.#sendMoves()
+			this.sendMoves()
 		}	 
 		if (key === "KeyR") {
-			this.#reset()
+			this.reset()
 		}
 	}
 
-	#getCenter(w, h) {
+	getCenter(w, h) {
 		//center on x on window. center y on game size
 		return {
 			x: window.innerWidth / 2 - w / 2 + "px",
@@ -124,7 +124,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		};
 	}
 
-	#getContext(w, h, color, isTransparent = false) {
+	getContext(w, h, color, isTransparent = false) {
 		this.canvas = document.createElement("canvas");
 		this.context = this.canvas.getContext("2d");
 		this.width = this.canvas.width = w;
@@ -134,7 +134,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		if (isTransparent) {
 			this.canvas.style.backgroundColor = "transparent";
 		}
-		const center = this.#getCenter(w, h);
+		const center = this.getCenter(w, h);
 		this.canvas.style.marginLeft = center.x;
 		this.canvas.style.marginTop = center.y;
         document.getElementById(this.elementID).appendChild(this.canvas);
@@ -142,7 +142,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		return this.context;
 	}
 
-    #offset(coord, gameObject = false, objectSize = 0){
+    offset(coord, gameObject = false, objectSize = 0){
         if (!gameObject){
             return coord * (this.cellSize + this.padding);
         }
@@ -159,7 +159,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
         this.topContext.canvas.width = w;
 		this.topContext.canvas.height = h;
 
-		const center = this.#getCenter(w, h);
+		const center = this.getCenter(w, h);
 		this.outlineContext.canvas.style.marginLeft = center.x;
 		this.outlineContext.canvas.style.marginTop = center.y;
 
@@ -176,20 +176,20 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
                 
                 this.outlineContext.fillStyle = color;
-                this.outlineContext.fillRect(this.#offset(col),
-                    this.#offset(row),
+                this.outlineContext.fillRect(this.offset(col),
+                    this.offset(row),
                     this.cellSize, this.cellSize);
 
                 if (cellVal === 2) {
                     this.topContext.fillStyle = this.player.color;
-				    this.topContext.fillRect(this.#offset(col, true, this.player.size),
-                        this.#offset(row, true, this.player.size),
+				    this.topContext.fillRect(this.offset(col, true, this.player.size),
+                        this.offset(row, true, this.player.size),
 				        this.player.size, this.player.size);
 				}
                 if (cellVal === 3) {
                     this.topContext.beginPath();
-                    this.topContext.arc(this.#offset(col, true, 0), 
-                        this.#offset(row, true, 0),
+                    this.topContext.arc(this.offset(col, true, 0), 
+                        this.offset(row, true, 0),
                         5, 0, 2 * Math.PI);
                     this.topContext.fillStyle = COINCOLOR;
                     this.topContext.fill();
@@ -210,7 +210,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		}
 	}
 
-    #reset(){
+    reset(){
         document.getElementById(this.elementID).innerHTML = "";
 		this.matrix =  [[1,1,1,1,1,1,1,1,1,1],
 						[1,0,0,0,0,0,0,0,0,1],
@@ -224,9 +224,9 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 						[1,1,1,1,1,1,1,1,1,1]];
 
 		this.game_id = Date.now();
-		this.uiContext = this.#getContext(WIDTH, HEIGHT, UICOLOR);
-		this.outlineContext = this.#getContext(0, 0, OUTLINECOLOR);
-		this.topContext = this.#getContext(0, 0, BACKGROUNDCOLOR, true);
+		this.uiContext = this.getContext(WIDTH, HEIGHT, UICOLOR);
+		this.outlineContext = this.getContext(0, 0, OUTLINECOLOR);
+		this.topContext = this.getContext(0, 0, BACKGROUNDCOLOR, true);
 		this.player = { x: 1, y: 1, color: PLAYERCOLOR, size: 20 };
         this.matrix[this.player.y][this.player.x] = 2;
 
