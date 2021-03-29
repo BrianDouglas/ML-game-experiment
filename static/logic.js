@@ -1,11 +1,11 @@
-const BACKGROUNDCOLOR = "#111";
-const WALLCOLOR = "#4488FF";
+const BACKGROUNDCOLOR = "#440154";
+const WALLCOLOR = "#30678D";
 const UICOLOR = "#000";
 const OUTLINECOLOR = "#444"
 
-const PLAYERCOLOR = "orange";
+const PLAYERCOLOR = "#35B778";
 const EXITCOLOR = "purple";
-const COINCOLOR = "gold";
+const COINCOLOR = "#FDE724";
 
 const WIDTH = 420;
 const HEIGHT = 420;
