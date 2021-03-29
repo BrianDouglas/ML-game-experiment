@@ -44,8 +44,6 @@ def game_data():
 @app.cli.command()
 def queryDB():
     '''Run a full query of the DB and update a local json file'''
-    os.environ["PASSWORD"] = 'bd2411008'
-    os.environ["USERNAME"] = 'admin'
     # establish connection
     connectTo = 'final_project'
     client = pymongo.MongoClient(f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@bricluster.yskth.mongodb.net/{connectTo}?retryWrites=true&w=majority")
