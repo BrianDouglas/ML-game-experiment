@@ -52,6 +52,7 @@ def queryDB():
     #query all records
     result = collection.find({})
     # loop over all records and create a json file with a key for each unique state and a count of actions for each state
+    print(f'{result.count()} records returned')
     json_dumper = {}
     for doc in result:
         for pair in doc['gameplay']:
@@ -62,9 +63,10 @@ def queryDB():
             else:
                 json_dumper[cur_state] = {"RIGHT":0,"LEFT":0,"UP":0,"DOWN":0}
                 json_dumper[cur_state][cur_action] += 1
-
+    print(f'{len(json_dumper)} unique states.')
     with open("static/agg_state_actions.json", 'w') as out_file:
         json.dump(json_dumper, out_file, indent=2)
+    print(f'agg_state_action.json updated!')
 
 if __name__ == "__main__":
     app.run(debug=True)
