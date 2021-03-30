@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 import pymongo
 
-from flask import Flask, session, render_template, request, jsonify
+from flask import Flask, session, render_template, request, jsonify, send_from_directory
 #from flask_socketio import SocketIO, emit
 
 LOAD_DB = True
@@ -26,6 +26,13 @@ def machine():
 def data():
     return render_template("data.html")
 
+@app.route("/json_data")
+def json_data():
+    data_path = "static/agg_state_actions.json"
+    with open(data_path, 'r') as f:
+        my_data = json.load(f)
+    return jsonify(my_data)
+
 @app.route("/game_data", methods=['POST'])
 def game_data():
     data = request.get_json()
@@ -40,6 +47,7 @@ def game_data():
         print(data)
         print(type(data))
     return "OK", 200
+
 
 @app.cli.command()
 def queryDB():
