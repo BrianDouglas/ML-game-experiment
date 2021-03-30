@@ -14,7 +14,7 @@ const GRIDSIZE = 10;
 
 class GridSystem {
 /*
-GridSystem class modified from public repo at https://github.com/fahadhaidari/game-code-bites/tree/master/grid-based-system
+GridSystem class modified from public repo at https://github.com/fahadhaidari/game-code-bites/tree/master/grid-based-system-with-character
 */
 	constructor(matrix, playerX, playerY, elementID = "game") {
 		this.matrix = matrix;

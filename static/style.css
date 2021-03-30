@@ -51,9 +51,9 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
-h1 {
-  padding-top: 20px;
-  padding-bottom: 40px;
+h1, h2 {
+  padding-top: 5px;
+  padding-bottom: 5px;
   text-align: center;
   font-weight: bolder;
 }

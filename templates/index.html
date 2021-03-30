@@ -5,9 +5,10 @@
 <script type="text/javascript" src="{{ url_for('static', filename='logic.js') }}"></script>
 {%endblock%}
 {% block heading%}
-Want to play a game?
+<h2>Want to play a game?</h2>
 {% endblock %}
 {% block body %}
+<p style="text-align: center;">Interactive grid system extended from public github repo <a href="https://github.com/fahadhaidari/game-code-bites/tree/master/grid-based-system-with-character" target= "_blank">HERE</a></p>
 <p style="text-align: center;">'W': UP, 'A': LEFT, 'S': DOWN, 'D': RIGHT, 'R': RESET</p>
 <div id="game"></div>
 {% endblock %}
