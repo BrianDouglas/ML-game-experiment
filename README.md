@@ -1,12 +1,12 @@
 # ML-game-experiment
-US-davis data science bootcamp final project utilizing RL to train ai to play a simple maze game
+UC-davis data science bootcamp final project utilizing RL to train ai to play a simple maze game
 
 ## I. Reinforcement Learning (RL) Training Process
   
   ### 1) Results and Insights
-    This model performs optimally when all is said and done. However, I set out with a goal to be able to generate a randomized maze and have the RL agent solve it. From watching a lot of lectures and reading papers trying to achieve this goal, I've gleaned that generalized tasks like that are much more difficult than I anticipated. While this model would be able to solve most mazes given to it. It would require training on that specific maze each time. This is just the nature of a DQN agent and Q Learning in general. I hope to look in to more generalizable solutions in the future.
+   This model performs optimally when all is said and done. However, I set out with a goal to be able to generate a randomized maze and have the RL agent solve it. From watching a lot of lectures and reading papers trying to achieve this goal, I've gleaned that generalized tasks like that are much more difficult than I anticipated. While this model would be able to solve most mazes given to it. It would require training on that specific maze each time. This is just the nature of a DQN agent and Q Learning in general. I hope to look in to more generalizable solutions in the future.
     
-    I'm hoping to capture a large amount of user data. I would like to run an experiment using the data to create a supervised learning model. I could then compare the performance between the two models.
+   I'm hoping to capture a large amount of user data. I would like to run an experiment using the data to create a supervised learning model. I could then compare the performance between the two models.
 
   ### 2) Environment (OpenAI Gym)
   * Files located in model_building folder.
