@@ -3,6 +3,7 @@ import time
 from datetime import datetime
 import json
 import pymongo
+import boto3
 
 from flask import Flask, session, render_template, request, jsonify, send_from_directory
 #from flask_socketio import SocketIO, emit
@@ -28,9 +29,13 @@ def data():
 
 @app.route("/json_data")
 def json_data():
-    data_path = "static/agg_state_actions.json"
-    with open(data_path, 'r') as f:
-        my_data = json.load(f)
+    session = boto3.session.Session(aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                                    aws_secret_access_key=os.getenv('AWS_ACCESS_KEY_SECRET'),
+                                    region_name='us-west-2')
+    s3 = session.resource('s3')
+    content_obj = s3.Object('brianslearningbucket', 'agg_state_actions.json')
+    file_content = content_obj.get()['Body'].read().decode('utf')
+    my_data = json.loads(file_content)
     return jsonify(my_data)
 
 @app.route("/game_data", methods=['POST'])
@@ -72,9 +77,12 @@ def queryDB():
                 json_dumper[cur_state] = {"RIGHT":0,"LEFT":0,"UP":0,"DOWN":0}
                 json_dumper[cur_state][cur_action] += 1
     print(f'{len(json_dumper)} unique states.')
-    with open("static/agg_state_actions.json", 'w') as out_file:
-        json.dump(json_dumper, out_file, indent=2)
-    print(f'agg_state_action.json updated!')
+    session = boto3.session.Session(aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                                    aws_secret_access_key=os.getenv('AWS_ACCESS_KEY_SECRET'),
+                                    region_name='us-west-2')
+    s3 = session.resource('s3')
+    s3obj = s3.Object('brianslearningbucket', 'agg_state_actions.json')
+    s3obj.put(Body=(bytes(json.dumps(json_dumper).encode('UTF-8'))))
 
 if __name__ == "__main__":
     app.run(debug=True)
