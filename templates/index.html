@@ -2,6 +2,7 @@
 {% set active_page = "human" %}
 
 {%block script%}
+<script type="text/javascript" src="{{ url_for('static', filename='gridSystem.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='logic.js') }}"></script>
 {%endblock%}
 {% block heading%}
