@@ -6,13 +6,10 @@ import pymongo
 import boto3
 
 from flask import Flask, session, render_template, request, jsonify, send_from_directory
-#from flask_socketio import SocketIO, emit
 
 LOAD_DB = True
 
 app = Flask(__name__)
-#app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
-#socketio = SocketIO(app)
 
 #landing page
 @app.route("/")
@@ -45,12 +42,11 @@ def game_data():
         connectTo = 'final_project'
         client = pymongo.MongoClient(f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@bricluster.yskth.mongodb.net/{connectTo}?retryWrites=true&w=majority")
         db = client.final_project
-        collection = db.state_action
+        collection = db.game_collection
         collection.insert(data)
         client.close()
     else:
         print(data)
-        print(type(data))
     return "OK", 200
 
 
@@ -68,20 +64,27 @@ def queryDB():
     print(f'{result.count()} records returned')
     json_dumper = {}
     for doc in result:
-        for pair in doc['gameplay']:
-            cur_action = pair['action']
-            cur_state = str(pair['state'])
-            if cur_state in json_dumper:
-                json_dumper[cur_state][cur_action] += 1
+        for i, record in enumerate(doc['gameplay']):
+            cur_action = record['action']
+            cur_state = str(record['state'])
+            if i > 0:
+                cur_time = record['time'] - doc['gameplay'][i-1]['time']
             else:
-                json_dumper[cur_state] = {"RIGHT":0,"LEFT":0,"UP":0,"DOWN":0}
-                json_dumper[cur_state][cur_action] += 1
+                cur_time = record['time']
+            if cur_state in json_dumper:
+                json_dumper[cur_state]['actions'][cur_action] += 1
+                json_dumper[cur_state]['time'].append(cur_time)
+            else:
+                json_dumper[cur_state] = {'actions': {"RIGHT":0,"LEFT":0,"UP":0,"DOWN":0}, 'time': []}
+                json_dumper[cur_state]['actions'][cur_action] += 1
+                json_dumper[cur_state]['time'].append(cur_time)
+
     print(f'{len(json_dumper)} unique states.')
     session = boto3.session.Session(aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
                                     aws_secret_access_key=os.getenv('AWS_ACCESS_KEY_SECRET'),
                                     region_name='us-west-2')
     s3 = session.resource('s3')
-    s3obj = s3.Object('brianslearningbucket', 'agg_state_actions.json')
+    s3obj = s3.Object('brianslearningbucket', 'agg_state_actions_2.json')
     s3obj.put(Body=(bytes(json.dumps(json_dumper).encode('UTF-8'))))
 
 if __name__ == "__main__":

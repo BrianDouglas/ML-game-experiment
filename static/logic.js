@@ -45,13 +45,21 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 		this.matrix[y][x] = val;
 	}
 
+	appendAction(cur_state, cur_action){
+		this.moveHistory.push({
+			state: cur_state, 
+			action: cur_action, 
+			time: Date.now() - this.game_id
+		});
+	}
+
 	movePlayer = ( event ) => {
 		var key = event.code;
 		if (this.num_goals > 0){
 			let current_state = JSON.parse(JSON.stringify(this.matrix));
 			if (key === "KeyA") {
 				if (this.isValidMove(-1, 0)) {
-					this.moveHistory.push({state: current_state, action: 'LEFT'});
+					this.appendAction(current_state, "LEFT");
 					this.updateMatrix(this.player.y, this.player.x, 0);
 					this.updateMatrix(this.player.y, this.player.x - 1, 2);
 					this.player.x --;
@@ -59,7 +67,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyD") {
 				if (this.isValidMove(1, 0)) {
-					this.moveHistory.push({state: current_state, action: 'RIGHT'})
+					this.appendAction(current_state, 'RIGHT');
 					this.updateMatrix(this.player.y, this.player.x, 0);
 					this.updateMatrix(this.player.y, this.player.x + 1, 2);
 					this.player.x ++;
@@ -67,7 +75,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyW") {
 				if (this.isValidMove(0, -1)) {
-					this.moveHistory.push({state: current_state, action: 'UP'})
+					this.appendAction(current_state, 'UP');
 					this.updateMatrix(this.player.y, this.player.x, 0);
 					this.updateMatrix(this.player.y - 1, this.player.x, 2);
 					this.player.y --;
@@ -75,7 +83,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 				}
 			} else if (key === "KeyS") {
 				if (this.isValidMove(0, 1)) {
-					this.moveHistory.push({state: current_state, action: 'DOWN'})
+					this.appendAction(current_state, 'DOWN');
 					this.updateMatrix(this.player.y, this.player.x, 0);
 					this.updateMatrix(this.player.y + 1, this.player.x, 2);
 					this.player.y ++;
@@ -87,6 +95,7 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 			this.sendMoves()
 		}	 
 		if (key === "KeyR") {
+			this.sendMoves()
 			this.reset()
 		}
 	}
