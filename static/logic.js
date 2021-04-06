@@ -95,7 +95,6 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 			this.sendMoves()
 		}	 
 		if (key === "KeyR") {
-			this.sendMoves()
 			this.reset()
 		}
 	}
