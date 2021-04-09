@@ -30,7 +30,7 @@ def json_data():
                                     aws_secret_access_key=os.getenv('AWS_ACCESS_KEY_SECRET'),
                                     region_name='us-west-2')
     s3 = session.resource('s3')
-    content_obj = s3.Object('brianslearningbucket', 'agg_state_actions.json')
+    content_obj = s3.Object('brianslearningbucket', 'agg_state_actions_2.json')
     file_content = content_obj.get()['Body'].read().decode('utf')
     my_data = json.loads(file_content)
     return jsonify(my_data)
@@ -57,7 +57,7 @@ def queryDB():
     connectTo = 'final_project'
     client = pymongo.MongoClient(f"mongodb+srv://{os.getenv('USERNAME')}:{os.getenv('PASSWORD')}@bricluster.yskth.mongodb.net/{connectTo}?retryWrites=true&w=majority")
     db = client.final_project
-    collection = db.state_action
+    collection = db.game_collection
     #query all records
     result = collection.find({})
     # loop over all records and create a json file with a key for each unique state and a count of actions for each state

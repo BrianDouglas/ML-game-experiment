@@ -67,6 +67,8 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
                 
             }
         })
+        this.chartTypeSelect = document.getElementById("chartType");
+        this.chartTypeSelect.addEventListener("change", this.changeChart);
         // get data for chart
         d3.json("/json_data", data => {
             this.data = data;
@@ -76,6 +78,22 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
         // add our event listener
         this.topContext.canvas.addEventListener("mousedown", this.cellSelect);
 	}
+
+    changeChart = (event) => {
+        if (event.target.value === 'time'){
+            this.myChart.options.title.text = "Time to Act In This State"
+            this.myChart.config.data.labels = [0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3.0];
+            this.myChart.options.tooltips.enabled = false
+        } else {
+            this.myChart.options.title.text = "Actions Taken In This State"
+            this.myChart.config.data.labels = ['LEFT', 'RIGHT', 'DOWN', 'UP']
+            this.myChart.options.tooltips.enabled = true
+        }
+        //this.myChart.update();
+        this.updateChart();
+    }
+
+
 
     cellSelect = (event) => {
         const rect = this.topContext.canvas.getBoundingClientRect();
@@ -119,13 +137,44 @@ GridSystem class modified from public repo at https://github.com/fahadhaidari/ga
 
     updateChart(){
         var result = this.data[this.getMatrixString()];
-        let left = result.LEFT;
-        let right = result.RIGHT;
-        let down = result.DOWN;
-        let up = result.UP;
-        this.myChart.data.datasets[0].data = [left, right, down, up];
+        if (this.chartTypeSelect.value === "action"){
+            let left = result.actions.LEFT;
+            let right = result.actions.RIGHT;
+            let down = result.actions.DOWN;
+            let up = result.actions.UP;
+            this.myChart.data.datasets[0].data = [left, right, down, up];
+        } else {
+            let data_objs;
+            if (result){
+                data_objs = this.parseTimeList(result.time);
+            } else {
+                data_objs = []
+            }
+            this.myChart.data.datasets[0].data = data_objs;
+        }
         this.myChart.update()
-        //this.data[this.getMatrixString()]
+    }
+
+    parseTimeList(times_list){
+        let data_objs = [{x:3.0, y:0}]
+        let prev;
+        console.log(times_list);
+        times_list.sort()
+        for (let i = 0; i < times_list.length; i++){
+            if (times_list[i] < 3000){
+                let x_num = Math.round((times_list[i]/100))/10
+                if (x_num !== prev){
+                    data_objs.push({x:x_num,y:1});
+                } else{
+                    data_objs[data_objs.length - 1].y++;
+                }
+                prev = x_num
+            } else {
+                data_objs[0].y++
+            }
+        }
+        console.log(data_objs);
+        return data_objs
     }
 
     getMatrixString(){
