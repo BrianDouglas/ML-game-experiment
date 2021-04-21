@@ -1,4 +1,4 @@
-# ML-game-experiment
+# RL-game-experiment
 UC-davis data science bootcamp final project utilizing RL to train ai to play a simple maze game
 
 ## I. Reinforcement Learning (RL) Training Process
